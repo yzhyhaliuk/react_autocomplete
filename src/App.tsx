@@ -13,6 +13,7 @@ export const App: React.FC<Props> = ({ debounceDelay = 300 }) => {
   const [selectedPerson, setSelectedPerson] = useState<Person | null>(null);
   const [focus, setFocus] = useState(false);
   const [match, setMatch] = useState(true);
+  const [search, setSearch] = useState('');
   const [people, setPeople] = useState(peopleFromServer);
 
   const debouncedFilter = useCallback(
@@ -34,8 +35,13 @@ export const App: React.FC<Props> = ({ debounceDelay = 300 }) => {
   );
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newSearch = event.target.value;
+    const newSearch = event.target.value.trim();
 
+    if (newSearch === search) {
+      return;
+    }
+
+    setSearch(newSearch);
     setSelectedPerson(null);
     debouncedFilter(newSearch);
   };
